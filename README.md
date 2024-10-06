@@ -10,4 +10,6 @@ Once done, run the code with "python3 kvcrawl.py"
 Type in the keyword you search for (e.g. lemmikoom) and await for the results.
 
 ### In case of error 403:
-    Google for a different header format and replace the exisiting one. kv.ee tends not to like automated searches that much so from time to time, changing header section is neccessary.
+    Google for a different header format and replace the exisiting one. 
+    kv.ee tends not to like automated searches that much so from time to time, 
+    changing header section is neccessary.
