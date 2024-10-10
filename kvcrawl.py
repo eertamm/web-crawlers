@@ -68,28 +68,27 @@ def parse_listings(html_content, keyword):
                 seen_links.add(link)  # Add link to seen set
                 price_tag = listing.find('div', class_='price')
                 price = price_tag.get_text(strip=True) if price_tag else "N/A"
+                area_tag = listing.find('div', class_='area')
+                area = area_tag.get_text(strip=True) if area_tag else "N/A"
                 
                 matching_listings.append({
                     'title': title,
                     'link': link,
-                    'price': price
+                    'price': price,
+                    'area': area
                 })
 
                 # Add a delay between individual adverts to prevent overloading the server
-                time.sleep(5)  # Adjust the delay as needed
+                time.sleep(5)
 
     print()  # Move to the next line after parsing all listings
     return matching_listings
 
 def main():
-    # Ask for the keyword to search 
-    # base_url = input("Enter the base query url : ")
-    total_pages = 5
+    # Ask for number of pages to search over and the keyword to search 
+    total_pages = int(input("Enter the number of pages you want to scrape through: ")) 
     keyword = input("Enter the keyword to search for: ")
-   
-    
     all_matching_listings = []
-    # total_pages = 6  # Change this to the number of pages you want to crawl
     results_per_page = 100  # Maximum results per page
 
     for page in range(total_pages):
@@ -114,9 +113,9 @@ def main():
             print(f"Title: {listing['title']}")
             print(f"Link: {listing['link']}")
             print(f"Price: {listing['price']}")
+            print(f"Area: {listing['area']}")
             print("-" * 40)
     else:
         print(f"No listings found with '{keyword}*'.")
-
-# Run the crawler
+# run the crawler
 main()
