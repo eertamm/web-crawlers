@@ -1,5 +1,7 @@
 import requests
 import re
+import time
+import sys
 from bs4 import BeautifulSoup
 
 # Base query URL with a placeholder for the start parameter
@@ -47,6 +49,10 @@ def parse_listings(html_content, keyword):
     keyword_pattern = re.compile(rf'.*{keyword}.*', re.IGNORECASE)
     
     for i, listing in enumerate(listings):
+        # Print progress on the same line
+        sys.stdout.write(f"\rParsing advert nr {i + 1} out of {len(listings)}")
+        sys.stdout.flush()  # Force the output to be written to the terminal immediately
+        
         # Get the listing's description and search for the pattern
         description = listing.get_text().lower()
         
@@ -68,7 +74,11 @@ def parse_listings(html_content, keyword):
                     'link': link,
                     'price': price
                 })
-    
+
+                # Add a delay between individual adverts to prevent overloading the server
+                time.sleep(5)  # Adjust the delay as needed
+
+    print()  # Move to the next line after parsing all listings
     return matching_listings
 
 def main():
@@ -84,25 +94,19 @@ def main():
 
     for page in range(total_pages):
         start_index = page * results_per_page
-        print(f"Fetching page starting at {start_index}...")
+        print(f"\rFetching page {page + 1}/{total_pages} starting at {start_index}...", end="")
+        sys.stdout.flush()
         url = f"{base_url}&start={start_index}"  # Append start parameter for pagination
-        print(f"Requesting URL: {url}")  # Print the URL being requested
         html_content = fetch_page(url)
         
         if html_content:
             # Parse the listings with the provided keyword
             matching_listings = parse_listings(html_content, keyword)
             all_matching_listings.extend(matching_listings)  # Collect results from all pages
-            
-            # Print the results found on this page for debugging
-            #print(f"Page {page + 1} found {len(matching_listings)} matching listings.")
-            
-            # Optional: Print the titles of matching listings
-            # for listing in matching_listings:
-                # print(f" - Found listing: {listing['title']} (Link: {listing['link']}")
         else:
-            print("Failed to retrieve the search results.")
+            print("\nFailed to retrieve the search results.")
             break  # Stop if page fetch fails
+    print("\nDone fetching pages.")
     
     if all_matching_listings:
         print(f"Found {len(all_matching_listings)} unique listings with '{keyword}*':")
