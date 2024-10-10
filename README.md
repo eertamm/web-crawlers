@@ -8,11 +8,11 @@
 
     - Create a python virtual environment because modules like 'requirements' and 'beautifulsoup4' tend to conflict with root settings
 
-        % python3 -m venv <your venv name here>
+        % python3 -m venv <your venv name>
 
     - Launch your virutal environment
 
-        % source crawlers/bin/activate
+        % source <your venv name>/bin/activate
 
     - Install dependencies
 
@@ -28,7 +28,8 @@
     Once done, launch the crawler
 
         % python3 kvcrawl.py
-        
+    
+    Type in the number of pages you wish to crawl through.    
     Type in the keyword you search for (e.g. koduloom) and await for the results.
 
 ### In case of error 403:
